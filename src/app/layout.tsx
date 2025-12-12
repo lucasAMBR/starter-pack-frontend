@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { NextThemeProvider } from "@/components/providers/NextThemeProvider";
+import { Toaster } from "sonner";
+import NextTopLoader from "nextjs-toploader";
+import QueryProvider from "@/components/providers/QueryProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,11 +27,33 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <NextThemeProvider
+          attribute={"class"}
+          defaultTheme="system"
+          enableSystem
+        >
+          <QueryProvider>
+            <NextTopLoader
+              color="#000000" // Cor "dummy", será ignorada pelo CSS abaixo
+              initialPosition={0.08}
+              crawlSpeed={200}
+              height={3}
+              crawl={true}
+              showSpinner={false}
+              easing="ease"
+              speed={200}
+              shadow="none" // Desabilita a sombra automática do JS para controlarmos no CSS
+              zIndex={1600}
+              showAtBottom={false}
+            />
+            {children}
+            <Toaster />
+          </QueryProvider>
+        </NextThemeProvider>
       </body>
     </html>
   );

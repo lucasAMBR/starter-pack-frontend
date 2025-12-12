@@ -1,0 +1,368 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Módulo predefinido",
+    "description": "",
+    "version": "1.0.0"
+  },
+  "tags": [
+    {
+      "name": "Auth"
+    }
+  ],
+  "paths": {
+    "/auth/register": {
+      "post": {
+        "summary": "/auth/register",
+        "deprecated": false,
+        "description": "Registro de usuário",
+        "operationId": "authRegister",
+        "tags": ["Auth"],
+        "parameters": [
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "",
+            "required": false,
+            "example": "application/json",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 3,
+                    "maxLength": 255
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "maxLength": 255
+                  },
+                  "password": {
+                    "type": "string",
+                    "minLength": 8,
+                    "maxLength": 255,
+                    "pattern": "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$"
+                  },
+                  "role_id": {
+                    "type": "string"
+                  }
+                },
+                "required": ["name", "password", "email", "role_id"]
+              },
+              "example": {
+                "name": "Lucas Ambrósio",
+                "email": "lucas.silvaambrosio@hotmail.com",
+                "password": "Lucas239810++",
+                "role_id": "019b0fd2-cbae-7077-9f73-0797140c6df3"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user": {
+                          "$ref": "#/components/schemas/User%20Resource"
+                        },
+                        "token": {
+                          "type": "string"
+                        }
+                      },
+                      "required": ["user", "token"]
+                    }
+                  },
+                  "required": ["error", "message", "data"]
+                },
+                "example": {
+                  "error": false,
+                  "message": "Registered and Authenticated with Success!",
+                  "data": {
+                    "user": {
+                      "id": 2,
+                      "name": "Lucas Ambrósio",
+                      "email": "lucas.silvaambrosio@hotmail.com",
+                      "roles": ["admin"],
+                      "created_at": "2025-12-06T05:47:03+00:00"
+                    },
+                    "token": "1|TsWhon0N0Po66uHj4T1URWEQTQdZQY9j4f2LN27Ze0831c7b"
+                  }
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "summary": "/auth/login",
+        "deprecated": false,
+        "description": "Autenticação do usuario no sistema",
+        "operationId": "authLogin",
+        "tags": ["Auth"],
+        "parameters": [
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "",
+            "required": false,
+            "example": "application/json",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "password": {
+                    "type": "string",
+                    "minLength": 3,
+                    "maxLength": 255
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "maxLength": 255
+                  }
+                },
+                "required": ["password", "email"]
+              },
+              "example": {
+                "email": "admin@example.com",
+                "password": "admin123"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user": {
+                          "$ref": "#/components/schemas/User%20Resource"
+                        },
+                        "token": {
+                          "type": "string"
+                        }
+                      },
+                      "required": ["user", "token"]
+                    }
+                  },
+                  "required": ["error", "message", "data"]
+                },
+                "example": {
+                  "error": false,
+                  "message": "Authenticated with success!",
+                  "data": {
+                    "user": {
+                      "id": 2,
+                      "name": "Lucas Ambrósio",
+                      "email": "lucas.silvaambrosio@hotmail.com",
+                      "roles": ["admin"],
+                      "created_at": "2025-12-06T05:47:03+00:00"
+                    },
+                    "token": "2|8ArokOvFC1yfhu72n054ZFkU4a10WWUJwHirQ2qed32186c8"
+                  }
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/auth/me": {
+      "get": {
+        "summary": "/auth/me",
+        "deprecated": false,
+        "description": "endpoint para identificação do usuario logado",
+        "operationId": "authMe",
+        "tags": ["Auth"],
+        "parameters": [
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "",
+            "required": false,
+            "example": "application/json",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/User%20Resource"
+                    }
+                  },
+                  "required": ["error", "message", "data"]
+                },
+                "example": {
+                  "error": false,
+                  "message": "Authenticated",
+                  "data": {
+                    "id": 2,
+                    "name": "Lucas Ambrósio",
+                    "email": "lucas.silvaambrosio@hotmail.com",
+                    "roles": ["admin"],
+                    "created_at": "2025-12-06T05:47:03+00:00"
+                  }
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "summary": "/auth/logout",
+        "deprecated": false,
+        "description": "Invalidação do token de autenticação",
+        "operationId": "authLogout",
+        "tags": ["Auth"],
+        "parameters": [
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "",
+            "required": false,
+            "example": "application/json",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "null"
+                    }
+                  },
+                  "required": ["error", "message", "data"]
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "User Resource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "created_at": {
+            "type": "string"
+          }
+        },
+        "required": ["id", "name", "email", "roles", "created_at"]
+      }
+    },
+    "responses": {},
+    "securitySchemes": {
+      "bearer": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  },
+  "servers": [],
+  "security": []
+}
