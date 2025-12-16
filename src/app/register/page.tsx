@@ -50,7 +50,7 @@ export const RegisterPage = () => {
             name: "",
             email: "",
             password: "",
-            role_id: "019b1466-d2e5-7371-8925-954e022e8166",
+            role_id: "019b0fd2-cbae-7077-9f73-0797140c6df3",
         },
     });
 

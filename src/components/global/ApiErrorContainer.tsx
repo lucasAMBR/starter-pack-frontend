@@ -21,9 +21,15 @@ export function ApiErrorNavigator({ errors, onClose }: ApiErrorNavigatorProps) {
 
   // 2. Cálculo seguro (mesmo se errors for null)
   const errorList = errors
-    ? Object.entries(errors).flatMap(([field, messages]) =>
-        messages.map((msg) => ({ field, message: msg })),
-      )
+    ? Object.entries(errors).flatMap(([field, messages]) => {
+      // Defesa: Se messages for null/undefined, retorna array vazio
+      if (!messages) return [];
+
+      // Defesa: Se messages for string, envolve num array. Se já for array, mantém.
+      const msgsArray = Array.isArray(messages) ? messages : [messages];
+
+      return msgsArray.map((msg) => ({ field, message: msg }));
+    })
     : [];
 
   const totalErrors = errorList.length;
