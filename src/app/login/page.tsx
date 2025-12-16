@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { customToaster } from "@/lib/customToaster";
 import { ChevronLeft, EyeIcon, EyeOffIcon } from "lucide-react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
 import { AnimatePresence, motion } from "motion/react";
@@ -19,8 +19,22 @@ import { authLoginBody } from "@/api/generated/zod/auth/auth.zod";
 import { useAuthLogin } from "@/api/generated/auth/auth";
 import { Spinner } from "@/components/ui/spinner";
 import CarrouselBanner from "@/components/auth/carrousel-banner";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { SearchParams } from "next/dist/server/request/search-params";
+import { useAuth } from "@/components/providers/AuthProvider";
 
 export const LoginPage = () => {
+
+    const searchParams = useSearchParams();
+
+    const router = useRouter();
+
+    const {
+        login
+    } = useAuth();
+
+    const reason = searchParams.get('redirected'); 
+
     const {
         register,
         handleSubmit,
@@ -47,6 +61,8 @@ export const LoginPage = () => {
             {
                 onSuccess: (response) => {
                     customToaster.success(response.message);
+                    login(response.data.token);
+                    router.push("/dashboard");
                 },
                 onError: (error) => {
                     customToaster.error(
@@ -80,6 +96,26 @@ export const LoginPage = () => {
                         onSubmit={handleSubmit(handleLogin)}
                         className="md:w-[450px] w-full flex flex-col gap-4 text-center"
                     >
+                        {reason === "expired" &&
+                            <Alert variant={"destructive"} className="text-start">
+                                <AlertTitle>
+                                    Token Expired
+                                </AlertTitle>
+                                <AlertDescription>
+                                    You have been logged out by token expiration
+                                </AlertDescription>
+                            </Alert>
+                        }
+                        {reason === "unauthorized" &&
+                            <Alert variant={"destructive"} className="text-start">
+                                <AlertTitle>
+                                    Unauthorized Access
+                                </AlertTitle>
+                                <AlertDescription>
+                                    You tried to access a private route without being authenticated
+                                </AlertDescription>
+                            </Alert>
+                        }
                         <div className="flex flex-col gap-2">
                             <Label>E-mail</Label>
                             <Input {...register("email")} placeholder="email@example.com" />

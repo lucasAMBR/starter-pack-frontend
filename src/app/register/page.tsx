@@ -26,11 +26,14 @@ import Link from "next/link";
 import { Spinner } from "@/components/ui/spinner";
 import { ApiErrorNavigator } from "@/components/global/ApiErrorContainer";
 import CarrouselBanner from "@/components/auth/carrousel-banner";
+import { useAuth } from "@/components/providers/AuthProvider";
 
-export const LoginPage = () => {
+export const RegisterPage = () => {
     const [apiErrors, setApiErrors] = useState<Record<string, string[]> | null>(
         null,
     );
+
+    const { login } = useAuth();
 
     const router = useRouter();
 
@@ -47,7 +50,7 @@ export const LoginPage = () => {
             name: "",
             email: "",
             password: "",
-            role_id: "019b0fd2-cbae-7077-9f73-0797140c6df3",
+            role_id: "019b1466-d2e5-7371-8925-954e022e8166",
         },
     });
 
@@ -62,6 +65,8 @@ export const LoginPage = () => {
             {
                 onSuccess: (response) => {
                     customToaster.success(response.message);
+                    login(response.data.token);
+                    router.push("/dashboard");
                 },
                 onError: (apiError) => {
                     const responseData = apiError.response?.data;
@@ -149,4 +154,4 @@ export const LoginPage = () => {
     );
 };
 
-export default LoginPage;
+export default RegisterPage;

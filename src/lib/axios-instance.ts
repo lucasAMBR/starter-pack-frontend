@@ -1,17 +1,18 @@
 import { ApiErrorResponse } from "@/types/ApiErrorResponse";
 import axios, { AxiosError, AxiosRequestConfig } from "axios";
+import { parseCookies } from "nookies"; // Importar nookies
 
 export const AXIOS_INSTANCE = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
 });
 
 AXIOS_INSTANCE.interceptors.request.use((config) => {
-  if (typeof window !== "undefined") {
-    const token = localStorage.getItem("token");
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
+  const { 'access_token': token } = parseCookies();
+  
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
   }
+  
   return config;
 });
 

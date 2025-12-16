@@ -5,6 +5,7 @@ import { NextThemeProvider } from "@/components/providers/NextThemeProvider";
 import { Toaster } from "sonner";
 import NextTopLoader from "nextjs-toploader";
 import QueryProvider from "@/components/providers/QueryProvider";
+import { AuthProvider } from "@/components/providers/AuthProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,9 +37,10 @@ export default function RootLayout({
           defaultTheme="system"
           enableSystem
         >
+          <AuthProvider>
           <QueryProvider>
             <NextTopLoader
-              color="#000000" // Cor "dummy", será ignorada pelo CSS abaixo
+              color="#000000"
               initialPosition={0.08}
               crawlSpeed={200}
               height={3}
@@ -46,13 +48,14 @@ export default function RootLayout({
               showSpinner={false}
               easing="ease"
               speed={200}
-              shadow="none" // Desabilita a sombra automática do JS para controlarmos no CSS
+              shadow="none"
               zIndex={1600}
               showAtBottom={false}
             />
             {children}
             <Toaster />
           </QueryProvider>
+          </AuthProvider>
         </NextThemeProvider>
       </body>
     </html>

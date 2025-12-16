@@ -4,101 +4,92 @@
  * Módulo predefinido
  * OpenAPI spec version: 1.0.0
  */
-import zod from "zod";
+import zod from 'zod';
+
 
 /**
  * Registro de usuário
  * @summary /auth/register
  */
 export const authRegisterHeader = zod.object({
-  Accept: zod.string().optional(),
-});
+  "Accept": zod.string().optional()
+})
 
 export const authRegisterBodyNameMin = 3;
-export const authRegisterBodyNameMax = 255;
-export const authRegisterBodyEmailMax = 255;
-export const authRegisterBodyPasswordMin = 8;
+export const authRegisterBodyNameMax = 255;export const authRegisterBodyEmailMax = 255;export const authRegisterBodyPasswordMin = 8;
 export const authRegisterBodyPasswordMax = 255;
-export const authRegisterBodyPasswordRegExp = new RegExp(
-  "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$",
-);
+export const authRegisterBodyPasswordRegExp = new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$');
+
 
 export const authRegisterBody = zod.object({
-  name: zod.string().min(authRegisterBodyNameMin).max(authRegisterBodyNameMax),
-  email: zod.email().max(authRegisterBodyEmailMax),
-  password: zod
-    .string()
-    .min(authRegisterBodyPasswordMin)
-    .max(authRegisterBodyPasswordMax)
-    .regex(authRegisterBodyPasswordRegExp),
-  role_id: zod.string(),
-});
+  "name": zod.string().min(authRegisterBodyNameMin).max(authRegisterBodyNameMax),
+  "email": zod.email().max(authRegisterBodyEmailMax),
+  "password": zod.string().min(authRegisterBodyPasswordMin).max(authRegisterBodyPasswordMax).regex(authRegisterBodyPasswordRegExp),
+  "role_id": zod.string()
+})
 
 /**
  * Autenticação do usuario no sistema
  * @summary /auth/login
  */
 export const authLoginHeader = zod.object({
-  Accept: zod.string().optional(),
-});
+  "Accept": zod.string().optional()
+})
 
 export const authLoginBodyPasswordMin = 3;
-export const authLoginBodyPasswordMax = 255;
-export const authLoginBodyEmailMax = 255;
+export const authLoginBodyPasswordMax = 255;export const authLoginBodyEmailMax = 255;
 
 export const authLoginBody = zod.object({
-  password: zod
-    .string()
-    .min(authLoginBodyPasswordMin)
-    .max(authLoginBodyPasswordMax),
-  email: zod.email().max(authLoginBodyEmailMax),
-});
+  "password": zod.string().min(authLoginBodyPasswordMin).max(authLoginBodyPasswordMax),
+  "email": zod.email().max(authLoginBodyEmailMax)
+})
 
 export const authLoginResponse = zod.object({
-  error: zod.boolean(),
-  message: zod.string(),
-  data: zod.object({
-    user: zod.object({
-      id: zod.string(),
-      name: zod.string(),
-      email: zod.string(),
-      roles: zod.array(zod.string()),
-      created_at: zod.string(),
-    }),
-    token: zod.string(),
-  }),
-});
+  "error": zod.boolean(),
+  "message": zod.string(),
+  "data": zod.object({
+  "user": zod.object({
+  "id": zod.string(),
+  "name": zod.string(),
+  "email": zod.string(),
+  "roles": zod.array(zod.string()),
+  "created_at": zod.string()
+}),
+  "token": zod.string()
+})
+})
 
 /**
  * endpoint para identificação do usuario logado
  * @summary /auth/me
  */
 export const authMeHeader = zod.object({
-  Accept: zod.string().optional(),
-});
+  "Accept": zod.string().optional()
+})
 
 export const authMeResponse = zod.object({
-  error: zod.boolean(),
-  message: zod.string(),
-  data: zod.object({
-    id: zod.string(),
-    name: zod.string(),
-    email: zod.string(),
-    roles: zod.array(zod.string()),
-    created_at: zod.string(),
-  }),
-});
+  "error": zod.boolean(),
+  "message": zod.string(),
+  "data": zod.object({
+  "id": zod.string(),
+  "name": zod.string(),
+  "email": zod.string(),
+  "roles": zod.array(zod.string()),
+  "created_at": zod.string()
+})
+})
 
 /**
  * Invalidação do token de autenticação
  * @summary /auth/logout
  */
 export const authLogoutHeader = zod.object({
-  Accept: zod.string().optional(),
-});
+  "Accept": zod.string().optional()
+})
 
 export const authLogoutResponse = zod.object({
-  error: zod.boolean(),
-  message: zod.string(),
-  data: zod.null(),
-});
+  "error": zod.boolean(),
+  "message": zod.string(),
+  "data": zod.null()
+})
+
